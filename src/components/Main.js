@@ -26,13 +26,12 @@ const fetchSelectedCategory = async (query) => {
     const data = await fetchDataFromAPI(`search/?q=${query}`)
     dispatch(setSearchresults(data.contents))
     dispatch(setLoading())
-    console.log(data)
 }
 
-  // useEffect(()=>{
+  useEffect(()=>{
        
-  //   fetchSelectedCategory(selectedCategory) 
-  // },[selectedCategory])
+    fetchSelectedCategory(selectedCategory) 
+  },[selectedCategory])
     
     return (
         <div>
