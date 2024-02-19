@@ -12,7 +12,7 @@ const appSlice = createSlice({
     },
     reducers:{
         setLoading:(state,action) => {
-            state.loading = true
+            state.loading = !state.loading
         },
         setSearchresults:(state,action) => {
             state.searchResults = action.payload

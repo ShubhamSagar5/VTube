@@ -24,8 +24,8 @@ const Main = () => {
 const fetchSelectedCategory = async (query) => {
     dispatch(setLoading())
     const data = await fetchDataFromAPI(`search/?q=${query}`)
-    dispatch(setSearchresults(data))
-    
+    dispatch(setSearchresults(data.contents))
+    dispatch(setLoading())
     console.log(data)
 }
 
