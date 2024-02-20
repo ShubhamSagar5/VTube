@@ -9,11 +9,13 @@ import { fetchDataFromAPI } from "../Utilis/api";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../Utilis/store/appSlice";
 import SuggestionVideoCard from "./SuggestionVideoCard";
+import LiveChat from "./LiveChat";
 
 
 
 const VideoDetails = () => {
     
+    const [showLiveChat,setShowLiveChat] = useState(true)
     const [video,setVideo] = useState()
     const [relatedvideos,setRelatedVideos] = useState()
     const {id} = useParams()
@@ -35,6 +37,9 @@ const VideoDetails = () => {
         dispatch(setLoading())
     }
 
+    const handleShowLiveChat = () => {
+        setShowLiveChat(!showLiveChat)
+    }
 
     useEffect(()=>{
         document.getElementById("root").classList.add("custom-h");
@@ -100,7 +105,13 @@ const VideoDetails = () => {
                         </div>
                     </div>
                 </div>
+               
                 <div className="flex flex-col py-6 px-4 overflow-y-auto lg:w-[350px] xl:w-[400px]">
+                                    <button className="bg-[#242424] text-white mb-2 rounded-sm p-1 hover:bg-[#474747]" onClick={handleShowLiveChat}>{showLiveChat ? 'Hide Chat': 'Show Chat'}</button>
+               { showLiveChat && <div className=" rounded-sm mb-7 p-1">
+                                 <LiveChat/>  
+                </div>}
+                    
                     {relatedvideos?.contents?.map((item, index) => {
                         if (item?.type !== "video") return false;
                         return (
