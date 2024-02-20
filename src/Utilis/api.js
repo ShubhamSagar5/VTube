@@ -20,3 +20,6 @@ export const fetchDataFromAPI = async(url) => {
     const json = await data.json()
     return json
 }
+
+
+export const  YOUTUBE_SEARCH_SUGGESTION_API = 'http://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q='

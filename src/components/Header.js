@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"
 
@@ -11,21 +11,27 @@ import { RiVideoAddLine } from "react-icons/ri";
 import { FiBell } from "react-icons/fi";
 import { CgClose } from "react-icons/cg";
 import Loader  from '../Shared/Loader'
-import { setMobileMenu } from "../Utilis/store/appSlice";
+import { setLoading, setMobileMenu } from "../Utilis/store/appSlice";
+import { YOUTUBE_SEARCH_SUGGESTION_API } from "../Utilis/api";
 
 
 
 const Header = () =>{
     
-    const [searchQuery,setSearchQuery] = useState("")
+    const [showSearchlist,setShowsearchList] = useState(true)
+    const [searchList,setSearchList] = useState([])
 
+   
+
+    const [searchQuery,setSearchQuery] = useState("")
+ console.log(searchQuery)
     const {loading,mobileMenu} = useSelector((store)=> store?.app)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const searchQueryHandler = (e) =>{
         if( (e?.key === "Enter" || e === 'searchButton') && searchQuery?.length > 0 ){
-            navigate(`/searchResults/${searchQuery}`)
+            navigate(`/searchResult/${searchQuery}`)
         }
 
     }
@@ -37,8 +43,41 @@ const Header = () =>{
     const { pathname } = useLocation();
     const pageName = pathname?.split("/")?.filter(Boolean)?.[0];
 
+
+    const getSearchListData = async() => {
+        const data = await fetch(YOUTUBE_SEARCH_SUGGESTION_API+searchQuery)
+        const json = await data.json()
+        console.log(json[1])
+        setSearchList(json[1])
+    }
+
+    const handleSearchResult = (result) => {
+       dispatch(setLoading())
+       navigate(`/searchResult/${result}`)
+       
+       setSearchList([]) 
+       dispatch(setLoading())
+       console.log(result)
+    }
+
+
+    useEffect(()=>{
+
+        const timer = setTimeout(()=>{
+              getSearchListData()
+        },500)
+      
+
+        return ()=>{
+            clearTimeout(timer)
+        } 
+
+    },[searchQuery])
+
+
     return(
-        <div className="sticky top-0 z-10 flex flex-row items-center justify-between h-14 px-4 md:px-5 bg-white dark:bg-black">
+        <>
+               <div className="sticky top-0 z-10 flex flex-row items-center justify-between h-14 px-4 md:px-5 bg-white dark:bg-black">
             {loading && <Loader />}
 
             <div className="flex h-5 items-center">
@@ -78,6 +117,8 @@ const Header = () =>{
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onKeyUp={searchQueryHandler}
                         placeholder="Search"
+                        // onFocus={()=>setShowsearchList(true)}
+                        // onBlur={()=>setShowsearchList(false)}
                         value={searchQuery}
                     />
                 </div>
@@ -102,6 +143,25 @@ const Header = () =>{
                 </div>
             </div>
         </div>
+        {
+            showSearchlist && <div className= { `${searchList.length > 1 ? 'bg-[#242424]':'bg-black'} + text-white rounded-lg p-1 fixed z-50 md:mt-[5px] md:ml-[448px] md:w-64 lg:w-[550px]` } >
+
+                            <ul >{
+                                searchList?.map((result)=> <li onClick={()=> handleSearchResult(result)} className="flex  shadow-lg  hover:bg-[#474747] p-2 px-2 border border-gray-900 rounded-lg mt-1">
+                                <IoIosSearch className="text-white text-xl mx-2"  /> {result}
+                                </li> )
+                            }
+                                
+                          
+                                
+
+                            </ul>
+
+        </div>
+        }
+        
+        </>
+     
     )
 }
 

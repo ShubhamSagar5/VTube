@@ -20,7 +20,7 @@ const appRouter = createBrowserRouter([
         element:<Feed/>
       },
        {
-    path:'/searchResults/:searchQuery',
+    path:'/searchResult/:searchQuery',
     element:<SearchResults/>
   },
   {

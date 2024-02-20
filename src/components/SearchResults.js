@@ -8,7 +8,7 @@ import { setLoading } from "../Utilis/store/appSlice";
 
 const SearchResults = () => {
    
-    const [result,setResults] = useState
+    const [result,setResults] = useState()
     const {searchQuery} = useParams()
 
     const {loading} = useSelector((store)=>store?.app?.loading)
@@ -19,6 +19,7 @@ const SearchResults = () => {
     const fetchSearchResults = async() => {
         dispatch(setLoading())
         const data = await fetchDataFromAPI(`search/?q=${searchQuery}`)
+ 
         setResults(data?.contents)
         dispatch(setLoading())
     }
@@ -27,7 +28,7 @@ const SearchResults = () => {
     useEffect(()=>{
         document.getElementById("root").classList.remove("custom-h");
         fetchSearchResults()
-    },[])
+    },[searchQuery])
 
 
     return (
@@ -37,10 +38,10 @@ const SearchResults = () => {
                 <div className="grid grid-cols-1 gap-2 p-5">
                     {result?.map((item) => {
                         if (item?.type !== "video") return false;
-                        let video = item.video;
+                        let video = item?.video;
                         return (
                             <SearchResultsVideoCard
-                                key={video.videoId}
+                                key={video?.videoId}
                                 video={video}
                             />
                         );
