@@ -37,7 +37,7 @@ function App() {
 
   return (
     <Provider store={store}>
-      <div className="App">
+      <div className="bg-black">
       <RouterProvider router={appRouter}/>
       </div>
     </Provider>

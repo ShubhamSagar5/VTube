@@ -18,7 +18,6 @@ import { YOUTUBE_SEARCH_SUGGESTION_API } from "../Utilis/api";
 
 const Header = () =>{
     
-    const [showSearchlist,setShowsearchList] = useState(true)
     const [searchList,setSearchList] = useState([])
 
    
@@ -65,7 +64,7 @@ const Header = () =>{
 
         const timer = setTimeout(()=>{
               getSearchListData()
-        },500)
+        },200)
       
 
         return ()=>{
@@ -138,13 +137,13 @@ const Header = () =>{
                         <FiBell className="text-white text-xl cursor-pointer" />
                     </div>
                 </div>
-                <div className="flex h-8 w-8 overflow-hidden rounded-full md:ml-4">
+                <div className="flex h-8 w-8 overflow-hidden rounded-full md:ml-4 ">
                     <img src="https://xsgames.co/randomusers/assets/avatars/female/67.jpg" />
                 </div>
             </div>
         </div>
         {
-            showSearchlist && <div className= { `${searchList.length > 1 ? 'bg-[#242424]':'bg-black'} + text-white rounded-lg p-1 fixed z-50 md:mt-[5px] md:ml-[448px] md:w-64 lg:w-[550px]` } >
+            searchList.length > 1 && <div className= { `${searchList.length > 1 ? 'bg-[#242424]':'bg-black'} + text-white rounded-lg p-1 fixed z-50 md:mt-[5px] md:ml-[448px] md:w-64 w-[230px] lg:w-[550px] ml-[105px]` } >
 
                             <ul >{
                                 searchList?.map((result)=> <li onClick={()=> handleSearchResult(result)} className="flex  shadow-lg  hover:bg-[#474747] p-2 px-2 border border-gray-900 rounded-lg mt-1">
